@@ -952,9 +952,6 @@ nav ul li a.active {
     min-height: 200vh;
     padding: 0;
     overflow: hidden;
-    /* iOS Safari optimization */
-    -webkit-overflow-scrolling: touch;
-    -webkit-transform: translateZ(0);
 }
 
 .projects-sticky-container {
@@ -1042,7 +1039,7 @@ nav ul li a.active {
     overflow-y: auto;
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
     transform: translateY(150vh);
-    transition: transform 0.1s linear, box-shadow 0.3s ease;
+    transition: none;
     z-index: 100;
     will-change: transform;
     -webkit-backface-visibility: hidden;
@@ -1050,9 +1047,6 @@ nav ul li a.active {
     opacity: 1 !important;
     transform: translate3d(0, 150vh, 0);
     contain: layout style paint;
-    /* iOS Safari specific optimizations */
-    -webkit-transform-style: preserve-3d;
-    transform-style: preserve-3d;
 }
 
 /* Add solid background layer */
@@ -1162,6 +1156,8 @@ body.dark-mode .project-pod-visual {
         max-width: none;
         max-height: 85vh;
         margin: 0 auto;
+        will-change: auto;
+        contain: none;
     }
     
     .project-pod-link[href*="ozmath"],
@@ -1176,7 +1172,7 @@ body.dark-mode .project-pod-visual {
     }
     
     .project-pod-link .project-pod {
-        transform: translate3d(0, 110vh, 0);
+        transform: translateY(100vh);
     }
     
     .project-pod h2 {
@@ -1353,19 +1349,5 @@ body.dark-mode .carousel-arrow:hover {
     .indicator {
         width: 10px;
         height: 10px;
-    }
-}
-
-/* iOS Safari specific fixes */
-@supports (-webkit-touch-callout: none) {
-    .project-pod {
-        /* Disable momentum scrolling within pods on iOS */
-        -webkit-overflow-scrolling: auto;
-    }
-    
-    /* Simplify transforms on iOS */
-    .projects-sticky-section {
-        -webkit-transform: none;
-        transform: none;
     }
 } 
