@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OzMath: How I beat LaTeX | Ben Chau</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script>
+        // Apply dark mode immediately to prevent flicker
+        if (localStorage.getItem('theme') === 'dark') {
+            document.documentElement.classList.add('dark-mode-loading');
+            document.addEventListener('DOMContentLoaded', function() {
+                document.body.classList.add('dark-mode');
+                document.documentElement.classList.remove('dark-mode-loading');
+            });
+        }
+    </script>
+</head>
+<body>
+    <header>
+        <a href="index.html" class="logo">BEN CHAU</a>
+        <nav>
+            <ul>
+                <li><a href="index.html#about">ABOUT</a></li>
+                <li><a href="index.html#experience">EXPERIENCE</a></li>
+                <li><a href="index.html#projects">PROJECTS</a></li>
+                <li><a href="index.html#blog">BLOG</a></li>
+            </ul>
+        </nav>
+        <div class="header-actions">
+            <button class="dark-mode-toggle" aria-label="Toggle dark mode">
+                <span class="light-icon">☀️</span>
+                <span class="dark-icon">🌙</span>
+            </button>
+            <a href="#" class="contact-button">BENJAMIN.CHAU@TINY.CLOUD</a>
+        </div>
+    </header>
+
+    <main class="blog-post">
+        <section class="blog-post-header">
+            <p class="blog-category">All Blogs</p>
+            <h1>OzMath: How I beat LaTeX</h1>
+            <p class="blog-date">Apr 10, 2025</p>
+        </section>
+
+        <section class="blog-post-image">
+            <img src="images/blog-latex-full.jpg" alt="LaTeX Problem Solution">
+        </section>
+
+        <article class="blog-post-content">
+            <p>When I was building OzMath, I wanted resizable containers for problem statements—similar to popular coding platforms like LeetCode. While implementing this, I noticed a weird LaTeX behavior: text inside these containers wouldn't wrap properly.</p>
+
+            <p>At first, I thought it was a CSS issue, but after digging deeper, I realized LaTeX was treating the entire block of text as one unbreakable unit. However, I noticed that in some cases—like when LaTeX environments (i.e., \begin{...} \end{...}) were used—the text would wrap correctly.</p>
+
+            <h2>The Solution: Forcing Line Breaks with Invisible Arrows</h2>
+
+            <p>I came up with a hack:</p>
+
+            <ol>
+                <li>Parse the LaTeX and insert tie breaks between every word.</li>
+                <li>Make the arrows invisible (using \phantom{$\to$}) (make the symbol but leave spacing).</li>
+                <li>This creates natural breaking points without altering formatting (allowing for line breaks).</li>
+            </ol>
+
+            <p>The result? LaTeX now sees "break points" between words, which allows the text to wrap naturally inside the resizable containers without any visible difference to the user.</p>
+
+            <h2>Final Code Snippet:</h2>
+
+            <div class="code-block">
+                <pre><code>
+export function addLaTeXSpacing(text: string): string {
+  // Only applies spacing to normal text words, but not inside array environments
+  if (!text || !text.trim()) return text;
+  
+  // Don't process text inside array environments
+  const textWithoutArrays = text.replace(/\\begin\{array\}(.*?)\\end\{array\}/gs, (match) => {
+    return `\\phantom{XX}${match}\\phantom{XX}`;
+  });
+  
+  // Don't process text inside array environments
+  if (textWithoutArrays.includes('\\begin{array}') || textWithoutArrays.includes('\\end{array}')) {
+    return text;
+  }
+  
+  // Split on spaces while preserving LaTeX commands
+  let words = textWithoutArrays.split(/\s+/);
+  
+  // Add phantom spacing between text words and \), after each text block
+  return words
+    .map(word => `${word}\\phantom{\\to}`)
+    .join(' ');
+}
+                </code></pre>
+            </div>
+
+            <p>This solution saved me hours of frustration and made the OzMath interface much more user-friendly. Sometimes the simplest hacks are the most effective!</p>
+
+            <div class="blog-tags">
+                <span>#React</span>
+                <span>#LaTeX</span>
+                <span>#WebDevelopment</span>
+            </div>
+        </article>
+
+        <section class="next-project-section">
+            <p class="next-project-label">Next Blog</p>
+            <h3>Technical Challenges in Fullstack Development</h3>
+            <a href="blog-technical.html" class="next-project-button">READ BLOG</a>
+        </section>
+    </main>
+
+    <footer id="contact">
+        <h2>Let's get in contact.</h2>
+        <a href="#" class="contact-button">BENJAMIN.CHAU@TINY.CLOUD</a>
+        <div class="footer-nav">
+            <ul>
+                <li><a href="index.html#about">ABOUT</a></li>
+                <li><a href="index.html#experience">EXPERIENCE</a></li>
+                <li><a href="index.html#projects">PROJECTS</a></li>
+                <li><a href="index.html#blog">BLOG</a></li>
+            </ul>
+        </div>
+        <div class="social-links">
+            <a href="https://www.linkedin.com/in/chaubenn/" target="_blank">LINKEDIN</a>
+        </div>
+    </footer>
+
+    <script src="js/script.js"></script>
+</body>
+</html> 

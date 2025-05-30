@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Into The Breach Project | Ben Chau</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script>
+        // Apply dark mode immediately to prevent flicker
+        if (localStorage.getItem('theme') === 'dark') {
+            document.documentElement.classList.add('dark-mode-loading');
+            document.addEventListener('DOMContentLoaded', function() {
+                document.body.classList.add('dark-mode');
+                document.documentElement.classList.remove('dark-mode-loading');
+            });
+        }
+    </script>
+</head>
+<body>
+    <header>
+        <a href="index.html" class="logo">BEN CHAU</a>
+        <nav>
+            <ul>
+                <li><a href="index.html#about">ABOUT</a></li>
+                <li><a href="index.html#experience">EXPERIENCE</a></li>
+                <li><a href="index.html#projects">PROJECTS</a></li>
+                <li><a href="index.html#blog">BLOG</a></li>
+            </ul>
+        </nav>
+        <div class="header-actions">
+            <button class="dark-mode-toggle" aria-label="Toggle dark mode">
+                <span class="light-icon">☀️</span>
+                <span class="dark-icon">🌙</span>
+            </button>
+            <a href="#" class="contact-button">BENJAMIN.CHAU@TINY.CLOUD</a>
+        </div>
+    </header>
+
+    <main class="project-detail">
+        <section class="project-hero">
+            <h1>Into The Breach</h1>
+            <div class="project-description">
+                <p>A board game coded in Python leveraging OOP and Tkinter.</p>
+                <div class="project-meta">
+                    <div>
+                        <h4>ROLE</h4>
+                        <p>Game Developer</p>
+                    </div>
+                    <div>
+                        <h4>TIMELINE</h4>
+                        <p>September 2024 - December 2024</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="project-banner">
+            <img src="images/breach-banner.jpg" alt="Into The Breach Banner">
+        </section>
+
+        <section class="project-content">
+            <div class="content-section">
+                <h3>The Game Concept</h3>
+                <p>Into The Breach is a turn-based tactical grid game inspired by the popular indie game of the same name. Players command units to battle against enemies, navigating a grid-based map and using strategic positioning to overcome challenges.</p>
+            </div>
+
+            <div class="content-section">
+                <h3>Development Process</h3>
+                <p>This project was built using Python with Tkinter for the graphical user interface. I employed object-oriented programming principles to create a clean, modular codebase that separates game logic from the visual presentation.</p>
+                <p>Key components of the implementation include:</p>
+                <ul style="list-style-type: disc; margin-left: 2rem;">
+                    <li>Grid-based movement system</li>
+                    <li>Turn-based combat mechanics</li>
+                    <li>Unit stats tracking (HP, damage, etc.)</li>
+                    <li>Simple AI for enemy movement</li>
+                </ul>
+            </div>
+
+            <div class="content-section">
+                <h3>Game Mechanics</h3>
+                <div class="game-mechanics">
+                    <div class="mechanics-item">
+                        <h4>Unit Types</h4>
+                        <p>The game features different unit types with unique abilities and stats:</p>
+                        <ul style="list-style-type: disc; margin-left: 2rem;">
+                            <li>Tanks: High HP, moderate damage</li>
+                            <li>Artillery: Long range, area damage</li>
+                            <li>Support: Healing and buffs</li>
+                        </ul>
+                    </div>
+                    <div class="mechanics-item">
+                        <h4>Combat System</h4>
+                        <p>Combat is resolved through a simple calculation based on unit stats and position. Attacking from behind or the sides provides bonuses, encouraging strategic positioning.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-section">
+                <h3>Technical Challenges</h3>
+                <p>One of the biggest challenges was implementing the grid-based movement and combat system. I had to ensure that units could only move to valid positions and that combat calculations accurately reflected the game design.</p>
+                <p>Another challenge was creating a responsive UI with Tkinter, which required careful planning of the layout and event handling to ensure smooth gameplay.</p>
+            </div>
+
+            <div class="content-section">
+                <h3>What I Learned</h3>
+                <p>This project deepened my understanding of:</p>
+                <ul style="list-style-type: disc; margin-left: 2rem;">
+                    <li>Object-oriented programming in Python</li>
+                    <li>Event-driven programming with Tkinter</li>
+                    <li>Game design principles and balance</li>
+                    <li>Implementing algorithms for grid-based movement and combat</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="next-project-section">
+            <p class="next-project-label">Next Project</p>
+            <h3>OzMath</h3>
+            <a href="project-ozmath.html" class="next-project-button">VIEW PROJECT</a>
+        </section>
+    </main>
+
+    <footer id="contact">
+        <h2>Let's get in contact.</h2>
+        <a href="#" class="contact-button">BENJAMIN.CHAU@TINY.CLOUD</a>
+        <div class="footer-nav">
+            <ul>
+                <li><a href="index.html#about">ABOUT</a></li>
+                <li><a href="index.html#experience">EXPERIENCE</a></li>
+                <li><a href="index.html#projects">PROJECTS</a></li>
+                <li><a href="index.html#blog">BLOG</a></li>
+            </ul>
+        </div>
+        <div class="social-links">
+            <a href="https://www.linkedin.com/in/chaubenn/" target="_blank">LINKEDIN</a>
+        </div>
+    </footer>
+
+    <script src="js/script.js"></script>
+</body>
+</html> 

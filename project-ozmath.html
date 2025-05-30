@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OzMath Project | Ben Chau</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script>
+        // Apply dark mode immediately to prevent flicker
+        if (localStorage.getItem('theme') === 'dark') {
+            document.documentElement.classList.add('dark-mode-loading');
+            document.addEventListener('DOMContentLoaded', function() {
+                document.body.classList.add('dark-mode');
+                document.documentElement.classList.remove('dark-mode-loading');
+            });
+        }
+    </script>
+</head>
+<body>
+    <header>
+        <a href="index.html" class="logo">BEN CHAU</a>
+        <nav>
+            <ul>
+                <li><a href="index.html#about">ABOUT</a></li>
+                <li><a href="index.html#experience">EXPERIENCE</a></li>
+                <li><a href="index.html#projects">PROJECTS</a></li>
+                <li><a href="index.html#blog">BLOG</a></li>
+            </ul>
+        </nav>
+        <div class="header-actions">
+            <button class="dark-mode-toggle" aria-label="Toggle dark mode">
+                <span class="light-icon">☀️</span>
+                <span class="dark-icon">🌙</span>
+            </button>
+            <a href="#" class="contact-button">BENJAMIN.CHAU@TINY.CLOUD</a>
+        </div>
+    </header>
+
+    <main class="project-detail">
+        <section class="project-hero">
+            <h1>OzMath</h1>
+            <div class="project-description">
+                <p>A robust fullstack study platform designed for high school students to more efficiently study Maths.</p>
+                <div class="project-meta">
+                    <div>
+                        <h4>ROLE</h4>
+                        <p>Full Stack Developer</p>
+                    </div>
+                    <div>
+                        <h4>TIMELINE</h4>
+                        <p>November 2024 - Present</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="project-banner">
+            <img src="images/ozmath-banner.jpg" alt="OzMath Banner">
+            <h2>Simplify your learning with OzMath.</h2>
+            <p>A platform designed to propel students ahead of their competition.</p>
+        </section>
+
+        <section class="project-content">
+            <div class="content-section">
+                <h3>The inspiration</h3>
+                <p>I've always enjoyed Mathematics ever since I was young. I also enjoy coding and tracking problems. So I thought I could combine the two! I took a lot of inspiration from Leetcode, which is another problem-based learning website catered for coding problems. I wanted to do the same however for mathematics. So I made OzMath!</p>
+            </div>
+
+            <div class="content-section">
+                <h3>The process</h3>
+                <p>OzMath is a React project written primarily in TypeScript. The user database handling and authentication is managed by Supabase, the payment is handled by Stripe, and the website itself is hosted by Netlify. I use MDX Video to handle the media and Framer to design and host the landing page. I use the OpenAI API and Google OAuth API to grade responses and authenticate users. ShadowUI was a big help setting up the sidebar and I used their react-resizable implementation to allow users to resize the containers in the problem view.</p>
+            </div>
+
+            <div class="content-section">
+                <h3>Problem Examples</h3>
+                <div class="problem-examples">
+                    <p>Here's an example of a problem from the OzMath platform:</p>
+                    <div class="problem-showcase">
+                        <div class="problem-preview">
+                            <img src="images/ozmath-problem-preview.png" alt="OzMath Problem Interface" style="width: 100%; border-radius: 0.5rem; border: 1px solid #ddd;">
+                            <div class="problem-overlay">
+                                <a href="https://app.ozmath.com/methods/2023101" target="_blank" rel="noopener noreferrer" class="try-live-button">
+                                    <span>Try Live Problem</span>
+                                    <small>Opens in new tab</small>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <p style="margin-top: 1rem; font-size: 0.9rem; opacity: 0.7;">
+                        Visit the live platform: <a href="https://app.ozmath.com/methods/2023101" target="_blank" rel="noopener noreferrer" class="live-link">app.ozmath.com/methods/2023101</a>
+                    </p>
+                </div>
+            </div>
+
+            <div class="content-section">
+                <h3>Challenges & Outcomes</h3>
+                <p>This project sort of blew up. I began it hoping to develop and demonstrate my skills in software development, however with every new addition, I became increasingly more passionate and saw potential for the project to become more so a start-up.</p>
+                <p>I'm still working on OzMath at the moment, mainly doing data entry converting problems to a JSON to add to the problems database.</p>
+                <p>Throughout my journey developing OzMath, I ran into a lot of challenges - the main ones were probably the resizable container and latex wrapping issues, which I have documented on my <a href="index.html#blog">Blog</a>.</p>
+            </div>
+        </section>
+
+        <section class="next-project-section">
+            <p class="next-project-label">Next Project</p>
+            <h3>Into The Breach</h3>
+            <a href="project-breach.html" class="next-project-button">VIEW PROJECT</a>
+        </section>
+    </main>
+
+    <footer id="contact">
+        <h2>Let's get in contact.</h2>
+        <a href="#" class="contact-button">BENJAMIN.CHAU@TINY.CLOUD</a>
+        <div class="footer-nav">
+            <ul>
+                <li><a href="index.html#about">ABOUT</a></li>
+                <li><a href="index.html#experience">EXPERIENCE</a></li>
+                <li><a href="index.html#projects">PROJECTS</a></li>
+                <li><a href="index.html#blog">BLOG</a></li>
+            </ul>
+        </div>
+        <div class="social-links">
+            <a href="https://www.linkedin.com/in/chaubenn/" target="_blank">LINKEDIN</a>
+        </div>
+    </footer>
+
+    <script src="js/script.js"></script>
+</body>
+</html> 

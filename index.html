@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ben Chau | Portfolio</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script>
+        // Apply dark mode immediately to prevent flicker
+        if (localStorage.getItem('theme') === 'dark') {
+            document.documentElement.classList.add('dark-mode-loading');
+            document.addEventListener('DOMContentLoaded', function() {
+                document.body.classList.add('dark-mode');
+                document.documentElement.classList.remove('dark-mode-loading');
+            });
+        }
+    </script>
+</head>
+<body>
+    <header>
+        <a href="#about" class="logo">BEN CHAU</a>
+        <nav>
+            <ul>
+                <li><a href="#about">ABOUT</a></li>
+                <li><a href="#experience">EXPERIENCE</a></li>
+                <li><a href="#projects">PROJECTS</a></li>
+                <li><a href="#blog">BLOG</a></li>
+            </ul>
+        </nav>
+        <div class="header-actions">
+            <button class="dark-mode-toggle" aria-label="Toggle dark mode">
+                <span class="light-icon">☀️</span>
+                <span class="dark-icon">🌙</span>
+            </button>
+        <a href="#" class="contact-button">BENJAMIN.CHAU@TINY.CLOUD</a>
+        </div>
+    </header>
+
+    <main>
+        <!-- About Section -->
+        <section class="hero" id="about">
+            <div class="profile-container">
+                <img src="images/profile-pic.jpg" alt="Ben Chau" class="profile-pic">
+            </div>
+            <div class="hero-content">
+                <h1>Hi, I'm Ben.</h1>
+                <p>A driven second-year Maths and Computer Science student at The University of Queensland who loves all things tech.</p>
+                <div class="hero-social-links">
+                    <a href="https://github.com/chaubenn" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                        </svg>
+                    </a>
+                    <a href="https://www.linkedin.com/in/chaubenn/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <section class="about">
+            <h2>About</h2>
+            <p>I'm a natural problem solver who enjoys teaching, learning and applying their technical skills.</p>
+            <p>I'm an entrepreneurial and adaptive person who obsesses over problems that take me out of my comfort zone. I enjoy challenges, teaching others and improving my skills something tangible.</p>
+            <div class="about-carousel">
+                <div class="carousel-container">
+                    <div class="carousel-slides">
+                        <div class="carousel-slide active">
+                            <img src="images/1.jpg" alt="Ben Chau - Image 1">
+                        </div>
+                        <div class="carousel-slide">
+                            <img src="images/2.jpg" alt="Ben Chau - Image 2">
+                        </div>
+                        <div class="carousel-slide">
+                            <img src="images/3.JPG" alt="Ben Chau - Image 3">
+                        </div>
+                        <div class="carousel-slide">
+                            <img src="images/about-image.jpg" alt="Ben Chau at an event">
+                        </div>
+                    </div>
+                    <button class="carousel-arrow carousel-prev" aria-label="Previous image">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="15,18 9,12 15,6"></polyline>
+                        </svg>
+                    </button>
+                    <button class="carousel-arrow carousel-next" aria-label="Next image">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="9,18 15,12 9,6"></polyline>
+                        </svg>
+                    </button>
+                    <div class="carousel-indicators">
+                        <button class="indicator active" data-slide="0"></button>
+                        <button class="indicator" data-slide="1"></button>
+                        <button class="indicator" data-slide="2"></button>
+                        <button class="indicator" data-slide="3"></button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Experience Section -->
+        <section class="page-section" id="experience">
+            <div class="experience-header">
+                <h1>Experience <span class="resume-link">(Resume &#8595;)</span></h1>
+            </div>
+
+            <div class="timeline">
+                <div class="job">
+                    <div class="job-date">Feb 2025 - Present</div>
+                    <div class="job-details">
+                        <h3>TinyMCE, Intern QA Engineer</h3>
+                        <p>Brisbane City, Australia (Hybrid)</p>
+                        <p>Quality assurance & technical documentation</p>
+                    </div>
+                </div>
+
+                <div class="job">
+                    <div class="job-date">2024 - 2025</div>
+                    <div class="job-details">
+                        <h3>JB Hi-Fi, Peak Trade Team Member</h3>
+                        <p>Mt Ommaney, Australia (On-site)</p>
+                        <p>Retail technology salesman</p>
+                    </div>
+                </div>
+
+                <div class="job">
+                    <div class="job-date">2023 - 2024</div>
+                    <div class="job-details">
+                        <h3>Freelance, Web Developer</h3>
+                        <p>Brisbane, Australia (Remote)</p>
+                        <p>Designing and developing websites for small businesses</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Projects Section -->
+        <section class="page-section projects-sticky-section" id="projects">
+            <div class="projects-sticky-container">
+                <div class="projects-title-wrapper">
+                    <h1 class="projects-title">Projects</h1>
+                    <p class="scroll-hint">(SCROLL TO EXPLORE)</p>
+                </div>
+                
+                <div class="projects-scroll-wrapper">
+                    <!-- OzMath Project Pod -->
+                    <a href="project-ozmath.html" class="project-pod-link">
+                        <div class="project-pod" data-project="ozmath">
+                            <div class="project-pod-content">
+                                <h2>OzMath</h2>
+                                <p>A robust fullstack study platform designed for high school students to more efficiently study Maths.</p>
+                                <div class="project-pod-visual">
+                                    <img src="images/ozmath-preview.jpg" alt="OzMath Problem Interface" class="project-preview-img">
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                    
+                    <!-- Into The Breach Project Pod -->
+                    <a href="project-breach.html" class="project-pod-link">
+                        <div class="project-pod" data-project="breach">
+                            <div class="project-pod-content">
+                                <h2>Into The Breach</h2>
+                                <p>A board game coded in Python leveraging OOP and Tkinter.</p>
+                                <div class="project-pod-visual">
+                                    <img src="images/breach-preview.jpg" alt="Into The Breach Game Preview" class="project-preview-img">
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Blog Section -->
+        <section class="page-section" id="blog">
+            <div class="blog-header">
+                <h1>Blog</h1>
+            </div>
+
+            <div class="blog-container">
+                <div class="blog-card">
+                    <div class="blog-image">
+                        <img src="images/blog-latex.jpg" alt="LaTeX formatting">
+                    </div>
+                    <div class="blog-info">
+                        <h2>OzMath: How I beat LaTeX</h2>
+                        <p class="blog-date">Apr 10, 2025</p>
+                        <p class="blog-excerpt">Overcoming mathematical formatting challenges with custom solutions...</p>
+                        <a href="blog-latex.html" class="read-more">READ MORE</a>
+                    </div>
+                </div>
+
+                <div class="blog-card">
+                    <div class="blog-image">
+                        <img src="images/blog-technical.jpg" alt="Technical challenges">
+                    </div>
+                    <div class="blog-info">
+                        <h2>Technical Challenges in Fullstack Development</h2>
+                        <p class="blog-date">Mar 28, 2025</p>
+                        <p class="blog-excerpt">Lessons learned from building complex web applications...</p>
+                        <a href="blog-technical.html" class="read-more">READ MORE</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer id="contact">
+        <h2>Let's get in contact.</h2>
+        <a href="#" class="contact-button">BENJAMIN.CHAU@TINY.CLOUD</a>
+        <div class="footer-nav">
+            <ul>
+                <li><a href="#about">ABOUT</a></li>
+                <li><a href="#experience">EXPERIENCE</a></li>
+                <li><a href="#projects">PROJECTS</a></li>
+                <li><a href="#blog">BLOG</a></li>
+            </ul>
+        </div>
+        <div class="social-links">
+            <a href="https://www.linkedin.com/in/chaubenn/" target="_blank">LINKEDIN</a>
+        </div>
+    </footer>
+
+    <script src="js/script.js"></script>
+</body>
+</html> 

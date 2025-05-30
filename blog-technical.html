@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OzMath: How Shadcn Resizable Component Saved Me | Ben Chau</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script>
+        // Apply dark mode immediately to prevent flicker
+        if (localStorage.getItem('theme') === 'dark') {
+            document.documentElement.classList.add('dark-mode-loading');
+            document.addEventListener('DOMContentLoaded', function() {
+                document.body.classList.add('dark-mode');
+                document.documentElement.classList.remove('dark-mode-loading');
+            });
+        }
+    </script>
+</head>
+<body>
+    <header>
+        <a href="index.html" class="logo">BEN CHAU</a>
+        <nav>
+            <ul>
+                <li><a href="index.html#about">ABOUT</a></li>
+                <li><a href="index.html#experience">EXPERIENCE</a></li>
+                <li><a href="index.html#projects">PROJECTS</a></li>
+                <li><a href="index.html#blog">BLOG</a></li>
+            </ul>
+        </nav>
+        <div class="header-actions">
+            <button class="dark-mode-toggle" aria-label="Toggle dark mode">
+                <span class="light-icon">☀️</span>
+                <span class="dark-icon">🌙</span>
+            </button>
+            <a href="#" class="contact-button">BENJAMIN.CHAU@TINY.CLOUD</a>
+        </div>
+    </header>
+
+    <main class="blog-post">
+        <section class="blog-post-header">
+            <p class="blog-category">All Blogs</p>
+            <h1>OzMath: How Shadcn's Resizable Saved Me</h1>
+            <p class="blog-date">Mar 28, 2025</p>
+        </section>
+
+        <section class="blog-post-image" style="text-align: center; margin: 2rem 0;">
+            <img src="images/blog-technical.jpg" alt="Shadcn UI Resizable Components" style="display: inline-block; width: 100%; height: auto; border-radius: 0.5rem;">
+        </section>
+
+        <article class="blog-post-content">
+            <p>When building OzMath's problem view, I wanted to create a familiar experience similar to LeetCode—a split-screen interface where users could resize containers to their preference. The left side would display the math problem, and the right side would be the area where users could work on their solutions.</p>
+
+            <p>What seemed like a simple feature request turned into a deep dive into DOM manipulation, performance optimization, and ultimately, a valuable lesson about leveraging existing solutions.</p>
+
+            <h2>The Hard Way: Custom DOM Manipulation</h2>
+
+            <p>Initially, I decided to build the resizable functionality from scratch. I implemented a solution using direct DOM manipulation with hard-coded size calculations:</p>
+
+            <div class="code-block">
+                <pre><code>
+// My original approach - lots of manual DOM work
+const [splitPosition, setSplitPosition] = useState(50);
+const [isResizing, setIsResizing] = useState(false);
+const containerRef = useRef&lt;HTMLDivElement&gt;(null);
+
+const handleMouseDown = (e: React.MouseEvent) => {
+  e.preventDefault();
+  setIsResizing(true);
+};
+
+useEffect(() => {
+  const handleMouseMove = (e: MouseEvent) => {
+    if (!isResizing || !containerRef.current) return;
+
+    const container = containerRef.current;
+    const containerRect = container.getBoundingClientRect();
+    const position = ((e.clientX - containerRect.left) / containerRect.width) * 100;
+    
+    // Allow full collapse to 0% but limit max to 70%
+    const limitedPosition = Math.min(Math.max(position, 0), 70);
+    setSplitPosition(limitedPosition);
+  };
+
+  const handleMouseUp = () => {
+    setIsResizing(false);
+  };
+
+  if (isResizing) {
+    document.addEventListener('mousemove', handleMouseMove);
+    document.addEventListener('mouseup', handleMouseUp);
+  }
+
+  return () => {
+    document.removeEventListener('mousemove', handleMouseMove);
+    document.removeEventListener('mouseup', handleMouseUp);
+  };
+}, [isResizing]);
+
+// Manual styling with calculated positions
+&lt;div className="problem-view" ref={containerRef}&gt;
+  &lt;div 
+    className="problem-view__description"
+    style={{ width: `${splitPosition}%` }}
+  &gt;
+    {/* Problem content */}
+  &lt;/div&gt;
+  &lt;div 
+    className={`problem-view__resizer ${isResizing ? 'resizing' : ''}`}
+    onMouseDown={handleMouseDown}
+  /&gt;
+  &lt;div 
+    className="problem-view__answer"
+    style={{ width: `${100 - splitPosition}%` }}
+  &gt;
+    {/* Answer content */}
+  &lt;/div&gt;
+&lt;/div&gt;
+                </code></pre>
+            </div>
+
+            <p>This approach worked initially, but it came with significant downsides:</p>
+
+            <ol>
+                <li>Poor performance due to frequent DOM updates</li>
+                <li>Inconsistent behavior across different browsers</li>
+                <li>Difficult to maintain and extend</li>
+                <li>No smooth transitions or animations</li>
+            </ol>
+
+            <h2>The Discovery: Shadcn UI to the Rescue</h2>
+
+            <p>After struggling with performance issues and cross-browser compatibility, I started researching existing solutions. That's when I discovered Shadcn UI's resizable component—a React-based solution that handled all the complexity I was wrestling with.</p>
+
+            <p>The transformation was remarkable. What took me dozens of lines of custom code could be achieved with just a few imports:</p>
+
+            <div class="code-block">
+                <pre><code>
+import {
+  ResizablePanelGroup,
+  ResizablePanel,
+  ResizableHandle,
+} from "./ui/resizable"
+
+// Clean, declarative approach - no manual DOM manipulation needed!
+const [leftPanelSize, setLeftPanelSize] = useState(60);
+
+// Handle panel resize with built-in callback
+const handlePanelResize = (sizes: number[]) => {
+  setLeftPanelSize(sizes[0]);
+};
+
+// Simple, clean JSX - Shadcn handles all the complexity
+&lt;ResizablePanelGroup
+  direction="horizontal"
+  className="problem-view"
+  onLayout={handlePanelResize}
+&gt;
+  &lt;ResizablePanel
+    defaultSize={60}
+    minSize={20}
+    maxSize={80}
+    className="problem-view__description"
+  &gt;
+    {/* Problem content - no manual styling needed */}
+    &lt;div className="problem-content"&gt;
+      {/* Content automatically responsive */}
+    &lt;/div&gt;
+  &lt;/ResizablePanel&gt;
+
+  {/* Built-in resizable handle with accessibility */}
+  &lt;ResizableHandle withHandle /&gt;
+
+  &lt;ResizablePanel
+    defaultSize={40}
+    minSize={20}
+    className="problem-view__answer"
+  &gt;
+    {/* Answer section - perfect responsive behavior */}
+    &lt;div className="answer-content"&gt;
+      {/* Automatically handles overflow and sizing */}
+    &lt;/div&gt;
+  &lt;/ResizablePanel&gt;
+&lt;/ResizablePanelGroup&gt;
+                </code></pre>
+            </div>
+
+            <h2>Lessons Learned: The Value of "Spare Parts"</h2>
+
+            <p>This experience taught me a crucial lesson about software development: spend more time looking for existing solutions before building from scratch. The Shadcn UI component not only solved my immediate problem but also provided:</p>
+
+            <ul>
+                <li>Better performance through optimized React patterns</li>
+                <li>Cross-browser compatibility out of the box</li>
+                <li>Accessibility features I hadn't considered</li>
+                <li>Smooth animations and user feedback</li>
+            </ul>
+
+            <p>However, I don't discredit my original learning experience. Building the custom solution first gave me deep familiarity with TypeScript and DOM manipulation—knowledge that proved invaluable when integrating and customizing the Shadcn component to fit OzMath's specific needs.</p>
+
+            <p>Sometimes the journey teaches you as much as the destination. The key is knowing when to build and when to borrow.</p>
+
+            <div class="blog-tags">
+                <span>#React</span>
+                <span>#ShadcnUI</span>
+                <span>#TypeScript</span>
+                <span>#Performance</span>
+            </div>
+        </article>
+
+        <section class="next-project-section">
+            <p class="next-project-label">Next Blog</p>
+            <h3>OzMath: How I beat LaTeX</h3>
+            <a href="blog-latex.html" class="next-project-button">READ BLOG</a>
+        </section>
+    </main>
+
+    <footer id="contact">
+        <h2>Let's get in contact.</h2>
+        <a href="#" class="contact-button">BENJAMIN.CHAU@TINY.CLOUD</a>
+        <div class="footer-nav">
+            <ul>
+                <li><a href="index.html#about">ABOUT</a></li>
+                <li><a href="index.html#experience">EXPERIENCE</a></li>
+                <li><a href="index.html#projects">PROJECTS</a></li>
+                <li><a href="index.html#blog">BLOG</a></li>
+            </ul>
+        </div>
+        <div class="social-links">
+            <a href="https://www.linkedin.com/in/chaubenn/" target="_blank">LINKEDIN</a>
+        </div>
+    </footer>
+
+    <script src="js/script.js"></script>
+</body>
+</html> 
