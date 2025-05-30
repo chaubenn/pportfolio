@@ -419,6 +419,9 @@ function initStickyProjectsScroll() {
     
     if (!projectsSection || projectPodLinks.length === 0) return;
     
+    // Detect iOS Safari
+    const isIOSSafari = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+    
     // Cache DOM elements and values
     const pods = Array.from(projectPodLinks).map(link => ({
         element: link.querySelector('.project-pod'),
@@ -432,10 +435,9 @@ function initStickyProjectsScroll() {
     // Cache for last known values to prevent unnecessary updates
     let lastScrollProgress = -1;
     let titleVisible = false;
-    
-    // Mobile-specific optimizations
-    let lastMobileUpdate = 0;
-    const mobileThrottleDelay = 16; // ~60fps for smoother mobile experience
+    let lastUpdateTime = 0;
+    const updateThreshold = isIOSSafari ? 0.01 : 0.005; // Higher threshold for iOS
+    const minUpdateInterval = isIOSSafari ? 16 : 0; // Limit updates to 60fps on iOS
     
     // Function to update cached values on resize
     function updateCachedValues() {
@@ -448,12 +450,12 @@ function initStickyProjectsScroll() {
     // Function to set initial positions based on screen size
     function setInitialPositions() {
         pods.forEach(pod => {
-            pod.element.style.transform = `translate3d(0, 110vh, 0)`;
-            // Add mobile-specific optimizations
-            if (isMobile) {
-                pod.element.style.willChange = 'transform';
-                pod.element.style.backfaceVisibility = 'hidden';
-                pod.element.style.perspective = '1000px';
+            if (isIOSSafari && isMobile) {
+                // Use simpler transform for iOS Safari
+                pod.element.style.webkitTransform = `translateY(110vh)`;
+                pod.element.style.transform = `translateY(110vh)`;
+            } else {
+                pod.element.style.transform = `translate3d(0, 110vh, 0)`;
             }
         });
     }
@@ -482,14 +484,15 @@ function initStickyProjectsScroll() {
     
     // Handle scroll animation
     function updateProjectsScroll() {
-        const scrollY = window.pageYOffset;
-        const now = performance.now();
+        const currentTime = performance.now();
         
-        // Additional mobile throttling to prevent jerky animations
-        if (isMobile && now - lastMobileUpdate < mobileThrottleDelay) {
+        // Throttle updates on iOS Safari
+        if (isIOSSafari && currentTime - lastUpdateTime < minUpdateInterval) {
             return;
         }
-        lastMobileUpdate = now;
+        lastUpdateTime = currentTime;
+        
+        const scrollY = window.pageYOffset;
         
         // Quick check if we're anywhere near the projects section
         const quickCheckStart = sectionTop - windowHeight * 1.5;
@@ -527,9 +530,8 @@ function initStickyProjectsScroll() {
             (scrollY - sectionTop + windowHeight) / (sectionHeight + windowHeight)
         ));
         
-        // Increase threshold for mobile to reduce jitter
-        const threshold = isMobile ? 0.01 : 0.005;
-        if (Math.abs(sectionScrollProgress - lastScrollProgress) < threshold) {
+        // Exit early if progress hasn't changed significantly
+        if (Math.abs(sectionScrollProgress - lastScrollProgress) < updateThreshold) {
             return;
         }
         lastScrollProgress = sectionScrollProgress;
@@ -557,11 +559,12 @@ function initStickyProjectsScroll() {
             // Calculate pod Y position
             const currentY = startY - (totalDistance * individualProgress);
             
-            // Apply transform with mobile optimizations
-            if (isMobile) {
-                // Use rounded values on mobile to prevent sub-pixel rendering issues
-                const roundedY = Math.round(currentY * 100) / 100;
-                pod.element.style.transform = `translate3d(0, ${roundedY}vh, 0)`;
+            // Apply transform with iOS Safari optimization
+            if (isIOSSafari && isMobile) {
+                // Use simpler transform and round values for smoother performance
+                const roundedY = Math.round(currentY);
+                pod.element.style.webkitTransform = `translateY(${roundedY}vh)`;
+                pod.element.style.transform = `translateY(${roundedY}vh)`;
             } else {
                 pod.element.style.transform = `translate3d(0, ${currentY}vh, 0)`;
             }
