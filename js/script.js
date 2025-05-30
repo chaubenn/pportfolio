@@ -433,6 +433,10 @@ function initStickyProjectsScroll() {
     let lastScrollProgress = -1;
     let titleVisible = false;
     
+    // Mobile-specific optimizations
+    let lastMobileUpdate = 0;
+    const mobileThrottleDelay = 16; // ~60fps for smoother mobile experience
+    
     // Function to update cached values on resize
     function updateCachedValues() {
         sectionTop = projectsSection.offsetTop;
@@ -445,6 +449,12 @@ function initStickyProjectsScroll() {
     function setInitialPositions() {
         pods.forEach(pod => {
             pod.element.style.transform = `translate3d(0, 110vh, 0)`;
+            // Add mobile-specific optimizations
+            if (isMobile) {
+                pod.element.style.willChange = 'transform';
+                pod.element.style.backfaceVisibility = 'hidden';
+                pod.element.style.perspective = '1000px';
+            }
         });
     }
     
@@ -473,6 +483,13 @@ function initStickyProjectsScroll() {
     // Handle scroll animation
     function updateProjectsScroll() {
         const scrollY = window.pageYOffset;
+        const now = performance.now();
+        
+        // Additional mobile throttling to prevent jerky animations
+        if (isMobile && now - lastMobileUpdate < mobileThrottleDelay) {
+            return;
+        }
+        lastMobileUpdate = now;
         
         // Quick check if we're anywhere near the projects section
         const quickCheckStart = sectionTop - windowHeight * 1.5;
@@ -510,8 +527,9 @@ function initStickyProjectsScroll() {
             (scrollY - sectionTop + windowHeight) / (sectionHeight + windowHeight)
         ));
         
-        // Exit early if progress hasn't changed significantly (threshold: 0.005)
-        if (Math.abs(sectionScrollProgress - lastScrollProgress) < 0.005) {
+        // Increase threshold for mobile to reduce jitter
+        const threshold = isMobile ? 0.01 : 0.005;
+        if (Math.abs(sectionScrollProgress - lastScrollProgress) < threshold) {
             return;
         }
         lastScrollProgress = sectionScrollProgress;
@@ -539,8 +557,14 @@ function initStickyProjectsScroll() {
             // Calculate pod Y position
             const currentY = startY - (totalDistance * individualProgress);
             
-            // Apply transform with will-change optimization
-            pod.element.style.transform = `translate3d(0, ${currentY}vh, 0)`;
+            // Apply transform with mobile optimizations
+            if (isMobile) {
+                // Use rounded values on mobile to prevent sub-pixel rendering issues
+                const roundedY = Math.round(currentY * 100) / 100;
+                pod.element.style.transform = `translate3d(0, ${roundedY}vh, 0)`;
+            } else {
+                pod.element.style.transform = `translate3d(0, ${currentY}vh, 0)`;
+            }
         });
     }
     
