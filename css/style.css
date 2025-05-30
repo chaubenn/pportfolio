@@ -952,6 +952,9 @@ nav ul li a.active {
     min-height: 200vh;
     padding: 0;
     overflow: hidden;
+    /* iOS Safari optimization */
+    -webkit-overflow-scrolling: touch;
+    -webkit-transform: translateZ(0);
 }
 
 .projects-sticky-container {
@@ -1047,6 +1050,9 @@ nav ul li a.active {
     opacity: 1 !important;
     transform: translate3d(0, 150vh, 0);
     contain: layout style paint;
+    /* iOS Safari specific optimizations */
+    -webkit-transform-style: preserve-3d;
+    transform-style: preserve-3d;
 }
 
 /* Add solid background layer */
@@ -1140,8 +1146,6 @@ body.dark-mode .project-pod-visual {
 @media (max-width: 768px) {
     .projects-sticky-section {
         min-height: 180vh;
-        /* Optimize for mobile touch scrolling */
-        -webkit-overflow-scrolling: touch;
     }
     
     .projects-title {
@@ -1153,44 +1157,26 @@ body.dark-mode .project-pod-visual {
     }
     
     .project-pod {
-        width: 100%;
+        width: calc(100% - 2rem);
         padding: 2rem;
         max-width: none;
         max-height: 85vh;
-        margin: 0 1rem;
-        /* Mobile-specific optimizations to prevent shaking */
-        will-change: transform;
-        -webkit-backface-visibility: hidden;
-        backface-visibility: hidden;
-        -webkit-perspective: 1000px;
-        perspective: 1000px;
-        -webkit-transform-style: preserve-3d;
-        transform-style: preserve-3d;
-        /* Disable text selection and touch callout to prevent interference */
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        user-select: none;
-        -webkit-touch-callout: none;
-        /* Smooth transforms on mobile */
-        -webkit-transition: transform 0.1s linear;
-        transition: transform 0.1s linear;
+        margin: 0 auto;
     }
     
     .project-pod-link[href*="ozmath"],
     .project-pod-link[href*="breach"] {
-        left: 50%;
-        right: auto;
-        transform: translateX(-50%);
-        width: calc(100% - 2rem);
-        /* Disable tap highlighting */
-        -webkit-tap-highlight-color: transparent;
+        left: 0;
+        right: 0;
+        transform: none;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        padding: 0 1rem;
     }
     
     .project-pod-link .project-pod {
-        transform: translateY(110vh);
-        /* Force hardware acceleration on mobile */
-        -webkit-transform: translate3d(-50%, 110vh, 0);
-        transform: translate3d(-50%, 110vh, 0);
+        transform: translate3d(0, 110vh, 0);
     }
     
     .project-pod h2 {
@@ -1205,17 +1191,19 @@ body.dark-mode .project-pod-visual {
     .project-pod-visual {
         height: 160px;
         margin-bottom: 1rem;
-        /* Optimize image rendering on mobile */
-        -webkit-transform: translateZ(0);
-        transform: translateZ(0);
+    }
+
+    /* Fix blog container centering on mobile */
+    .page-section .blog-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 2rem;
     }
     
-    /* Additional mobile body optimizations */
-    body {
-        /* Prevent elastic scroll bounce that can interfere with animations */
-        overscroll-behavior: none;
-        /* Improve scroll performance */
-        -webkit-overflow-scrolling: touch;
+    .blog-card {
+        width: 100%;
+        max-width: 400px;
     }
 }
 
@@ -1365,5 +1353,19 @@ body.dark-mode .carousel-arrow:hover {
     .indicator {
         width: 10px;
         height: 10px;
+    }
+}
+
+/* iOS Safari specific fixes */
+@supports (-webkit-touch-callout: none) {
+    .project-pod {
+        /* Disable momentum scrolling within pods on iOS */
+        -webkit-overflow-scrolling: auto;
+    }
+    
+    /* Simplify transforms on iOS */
+    .projects-sticky-section {
+        -webkit-transform: none;
+        transform: none;
     }
 } 
