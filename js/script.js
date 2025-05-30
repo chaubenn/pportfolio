@@ -467,11 +467,26 @@ function initStickyProjectsScroll() {
         const scrollRelativeToSection = scrollY - sectionTop;
         const sectionVisible = scrollRelativeToSection > -windowHeight && scrollRelativeToSection < sectionHeight + windowHeight;
         
-        // Show/hide title
+        // Show/hide title - fade out just before blog section
         if (projectsTitle) {
-            if (sectionVisible && scrollRelativeToSection > -windowHeight * 0.5 && scrollRelativeToSection < sectionHeight) {
-                projectsTitle.style.opacity = '1';
-                projectsTitle.style.visibility = 'visible';
+            if (sectionVisible && scrollRelativeToSection > -windowHeight * 0.5) {
+                // Calculate fade based on scroll position - fade out in the last 20% of the section
+                const fadeStart = sectionHeight * 0.4; // Start fading at 40% through section
+                const fadeEnd = sectionHeight * 0.6;   // Completely gone at 60% through section
+                
+                if (scrollRelativeToSection < fadeStart) {
+                    projectsTitle.style.opacity = '1';
+                    projectsTitle.style.visibility = 'visible';
+                } else if (scrollRelativeToSection < fadeEnd) {
+                    const fadeProgress = (scrollRelativeToSection - fadeStart) / (fadeEnd - fadeStart);
+                    const opacity = Math.max(0, Math.min(1, 1 - fadeProgress));
+                    
+                    projectsTitle.style.opacity = opacity;
+                    projectsTitle.style.visibility = opacity > 0 ? 'visible' : 'hidden';
+                } else {
+                    projectsTitle.style.opacity = '0';
+                    projectsTitle.style.visibility = 'hidden';
+                }
             } else {
                 projectsTitle.style.opacity = '0';
                 projectsTitle.style.visibility = 'hidden';
@@ -504,11 +519,26 @@ function initStickyProjectsScroll() {
         const scrollRelativeToSection = scrollY - sectionTop;
         const sectionVisible = scrollRelativeToSection > -windowHeight && scrollRelativeToSection < sectionHeight + windowHeight;
         
-        // Show/hide title
+        // Show/hide title - fade out just before blog section
         if (projectsTitle) {
-            if (sectionVisible && scrollRelativeToSection > -windowHeight * 0.5 && scrollRelativeToSection < sectionHeight) {
-                projectsTitle.style.opacity = '1';
-                projectsTitle.style.visibility = 'visible';
+            if (sectionVisible && scrollRelativeToSection > -windowHeight * 0.5) {
+                // Calculate fade based on scroll position - fade out in the last 20% of the section
+                const fadeStart = sectionHeight * 0.4; // Start fading at 40% through section
+                const fadeEnd = sectionHeight * 0.6;   // Completely gone at 60% through section
+                
+                if (scrollRelativeToSection < fadeStart) {
+                    projectsTitle.style.opacity = '1';
+                    projectsTitle.style.visibility = 'visible';
+                } else if (scrollRelativeToSection < fadeEnd) {
+                    const fadeProgress = (scrollRelativeToSection - fadeStart) / (fadeEnd - fadeStart);
+                    const opacity = Math.max(0, Math.min(1, 1 - fadeProgress));
+                    
+                    projectsTitle.style.opacity = opacity;
+                    projectsTitle.style.visibility = opacity > 0 ? 'visible' : 'hidden';
+                } else {
+                    projectsTitle.style.opacity = '0';
+                    projectsTitle.style.visibility = 'hidden';
+                }
             } else {
                 projectsTitle.style.opacity = '0';
                 projectsTitle.style.visibility = 'hidden';
