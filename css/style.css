@@ -748,7 +748,7 @@ footer h2 {
         order: 4;
     }
     
-    .contact-button {
+    .header-actions .contact-button {
         display: none;
     }
 
