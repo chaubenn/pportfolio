@@ -419,9 +419,6 @@ function initStickyProjectsScroll() {
     
     if (!projectsSection || projectPodLinks.length === 0) return;
     
-    // Detect iOS Safari
-    const isIOSSafari = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-    
     // Cache DOM elements and values
     const pods = Array.from(projectPodLinks).map(link => ({
         element: link.querySelector('.project-pod'),
@@ -433,11 +430,8 @@ function initStickyProjectsScroll() {
     let isMobile = window.innerWidth <= 768;
     
     // Cache for last known values to prevent unnecessary updates
-    let lastScrollProgress = -1;
-    let titleVisible = false;
-    let lastUpdateTime = 0;
-    const updateThreshold = isIOSSafari ? 0.01 : 0.005; // Higher threshold for iOS
-    const minUpdateInterval = isIOSSafari ? 16 : 0; // Limit updates to 60fps on iOS
+    let lastScrollY = -1;
+    let animationFrame = null;
     
     // Function to update cached values on resize
     function updateCachedValues() {
@@ -447,13 +441,12 @@ function initStickyProjectsScroll() {
         isMobile = window.innerWidth <= 768;
     }
     
-    // Function to set initial positions based on screen size
+    // Function to set initial positions
     function setInitialPositions() {
         pods.forEach(pod => {
-            if (isIOSSafari && isMobile) {
-                // Use simpler transform for iOS Safari
-                pod.element.style.webkitTransform = `translateY(110vh)`;
-                pod.element.style.transform = `translateY(110vh)`;
+            if (isMobile) {
+                // Start pods just below viewport on mobile
+                pod.element.style.transform = `translateY(100vh)`;
             } else {
                 pod.element.style.transform = `translate3d(0, 110vh, 0)`;
             }
@@ -469,54 +462,14 @@ function initStickyProjectsScroll() {
         projectsTitle.style.visibility = 'hidden';
     }
     
-    // Optimized easing function with lookup table for common values
-    const easingCache = new Map();
-    function easeInOutCubic(t) {
-        // Round to 3 decimal places for caching
-        const key = Math.round(t * 1000) / 1000;
-        if (easingCache.has(key)) {
-            return easingCache.get(key);
-        }
-        const result = t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
-        easingCache.set(key, result);
-        return result;
-    }
-    
-    // Handle scroll animation
-    function updateProjectsScroll() {
-        const currentTime = performance.now();
+    // Simplified animation for mobile
+    function updateMobileScroll(scrollY) {
+        const scrollRelativeToSection = scrollY - sectionTop;
+        const sectionVisible = scrollRelativeToSection > -windowHeight && scrollRelativeToSection < sectionHeight + windowHeight;
         
-        // Throttle updates on iOS Safari
-        if (isIOSSafari && currentTime - lastUpdateTime < minUpdateInterval) {
-            return;
-        }
-        lastUpdateTime = currentTime;
-        
-        const scrollY = window.pageYOffset;
-        
-        // Quick check if we're anywhere near the projects section
-        const quickCheckStart = sectionTop - windowHeight * 1.5;
-        const quickCheckEnd = sectionTop + sectionHeight + windowHeight * 0.5;
-        
-        if (scrollY < quickCheckStart || scrollY > quickCheckEnd) {
-            // Far from section - hide title if visible and exit early
-            if (projectsTitle && titleVisible) {
-                projectsTitle.style.opacity = '0';
-                projectsTitle.style.visibility = 'hidden';
-                titleVisible = false;
-            }
-            return;
-        }
-        
-        // Calculate if we're in the projects section for title visibility
-        const sectionStart = sectionTop - windowHeight * 0.5;
-        const sectionEnd = sectionTop + sectionHeight - windowHeight * 0.5;
-        const inProjectsSection = scrollY >= sectionStart && scrollY <= sectionEnd;
-        
-        // Update title visibility only if changed
-        if (projectsTitle && inProjectsSection !== titleVisible) {
-            titleVisible = inProjectsSection;
-            if (titleVisible) {
+        // Show/hide title
+        if (projectsTitle) {
+            if (sectionVisible && scrollRelativeToSection > -windowHeight * 0.5 && scrollRelativeToSection < sectionHeight) {
                 projectsTitle.style.opacity = '1';
                 projectsTitle.style.visibility = 'visible';
             } else {
@@ -525,78 +478,117 @@ function initStickyProjectsScroll() {
             }
         }
         
-        // Calculate progress through the section (0 to 1)
-        const sectionScrollProgress = Math.max(0, Math.min(1, 
-            (scrollY - sectionTop + windowHeight) / (sectionHeight + windowHeight)
-        ));
+        if (!sectionVisible) return;
         
-        // Exit early if progress hasn't changed significantly
-        if (Math.abs(sectionScrollProgress - lastScrollProgress) < updateThreshold) {
-            return;
-        }
-        lastScrollProgress = sectionScrollProgress;
+        // Simple linear animation for mobile
+        const progress = Math.max(0, Math.min(1, (scrollRelativeToSection + windowHeight) / (sectionHeight + windowHeight)));
         
-        // Apply easing to the progress
-        const easedProgress = easeInOutCubic(sectionScrollProgress);
-        
-        // Pre-calculate common values
-        const startY = 110;
-        const endY = -110;
-        const totalDistance = startY - endY;
-        
-        // Update pod positions
         pods.forEach((pod, index) => {
-            // Different timing for each pod
-            let individualProgress;
+            let podProgress;
             if (index === 0) {
-                // OzMath pod - appears early and exits midway through scroll
-                individualProgress = Math.max(0, Math.min(1, easedProgress * 1.5));
+                // First pod appears earlier
+                podProgress = Math.min(1, progress * 1.8);
             } else {
-                // Breach pod - appears later and continues all the way to the end
-                individualProgress = Math.max(0, Math.min(1, (easedProgress - 0.3) / 0.7));
+                // Second pod appears later
+                podProgress = Math.max(0, Math.min(1, (progress - 0.2) * 1.25));
             }
             
-            // Calculate pod Y position
-            const currentY = startY - (totalDistance * individualProgress);
-            
-            // Apply transform with iOS Safari optimization
-            if (isIOSSafari && isMobile) {
-                // Use simpler transform and round values for smoother performance
-                const roundedY = Math.round(currentY);
-                pod.element.style.webkitTransform = `translateY(${roundedY}vh)`;
-                pod.element.style.transform = `translateY(${roundedY}vh)`;
-            } else {
-                pod.element.style.transform = `translate3d(0, ${currentY}vh, 0)`;
-            }
+            // Simple linear movement from 100vh to -100vh
+            const yPosition = 100 - (podProgress * 200);
+            pod.element.style.transform = `translateY(${yPosition}vh)`;
         });
     }
     
-    // Throttle scroll events for performance
-    let ticking = false;
+    // Desktop animation with easing
+    function updateDesktopScroll(scrollY) {
+        const scrollRelativeToSection = scrollY - sectionTop;
+        const sectionVisible = scrollRelativeToSection > -windowHeight && scrollRelativeToSection < sectionHeight + windowHeight;
+        
+        // Show/hide title
+        if (projectsTitle) {
+            if (sectionVisible && scrollRelativeToSection > -windowHeight * 0.5 && scrollRelativeToSection < sectionHeight) {
+                projectsTitle.style.opacity = '1';
+                projectsTitle.style.visibility = 'visible';
+            } else {
+                projectsTitle.style.opacity = '0';
+                projectsTitle.style.visibility = 'hidden';
+            }
+        }
+        
+        if (!sectionVisible) return;
+        
+        // Calculate progress with easing for desktop
+        const progress = Math.max(0, Math.min(1, (scrollRelativeToSection + windowHeight) / (sectionHeight + windowHeight)));
+        const easedProgress = progress < 0.5 ? 4 * progress * progress * progress : 1 - Math.pow(-2 * progress + 2, 3) / 2;
+        
+        pods.forEach((pod, index) => {
+            let podProgress;
+            if (index === 0) {
+                podProgress = Math.min(1, easedProgress * 1.5);
+            } else {
+                podProgress = Math.max(0, Math.min(1, (easedProgress - 0.3) / 0.7));
+            }
+            
+            const yPosition = 110 - (podProgress * 220);
+            pod.element.style.transform = `translate3d(0, ${yPosition}vh, 0)`;
+        });
+    }
+    
+    // Main update function
+    function updateScroll() {
+        const scrollY = window.pageYOffset;
+        
+        // Skip if scroll position hasn't changed significantly
+        if (Math.abs(scrollY - lastScrollY) < 1) {
+            animationFrame = null;
+            return;
+        }
+        
+        lastScrollY = scrollY;
+        
+        if (isMobile) {
+            updateMobileScroll(scrollY);
+        } else {
+            updateDesktopScroll(scrollY);
+        }
+        
+        animationFrame = null;
+    }
+    
+    // Optimized scroll handler
     function handleScroll() {
-        if (!ticking) {
-            window.requestAnimationFrame(function() {
-                updateProjectsScroll();
-                ticking = false;
-            });
-            ticking = true;
+        if (animationFrame === null) {
+            animationFrame = requestAnimationFrame(updateScroll);
         }
     }
     
-    // Listen for scroll events with passive listener for better performance
-    window.addEventListener('scroll', handleScroll, { passive: true });
+    // Use a less aggressive scroll listener on mobile
+    if (isMobile) {
+        let scrollTimeout;
+        window.addEventListener('scroll', function() {
+            clearTimeout(scrollTimeout);
+            scrollTimeout = setTimeout(handleScroll, 10); // 10ms debounce on mobile
+        }, { passive: true });
+    } else {
+        window.addEventListener('scroll', handleScroll, { passive: true });
+    }
     
     // Initial update
-    updateProjectsScroll();
+    updateScroll();
     
-    // Debounced resize handler
+    // Handle resize
     let resizeTimeout;
     window.addEventListener('resize', function() {
         clearTimeout(resizeTimeout);
         resizeTimeout = setTimeout(function() {
+            const wasDesktop = !isMobile;
             updateCachedValues();
-            setInitialPositions();
-            updateProjectsScroll();
+            
+            // If switched between mobile/desktop, reset positions
+            if (wasDesktop !== !isMobile) {
+                setInitialPositions();
+                updateScroll();
+            }
         }, 250);
     });
 }
