@@ -1,4 +1,9 @@
 import { BlogPosts } from 'app/components/posts'
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Ben Chau',
+}
 
 export default function Page() {
   return (
