@@ -1,7 +1,20 @@
 [build]
   command = "pnpm build"
-  publish = ".next"
+  publish = "out"
 
 [build.environment]
   NODE_VERSION = "18"
   NPM_VERSION = "9"
+
+# Force static build
+[build.processing]
+  skip_processing = false
+
+# Override auto-detection
+[build.processing.html]
+  pretty_urls = true
+
+# Disable Next.js auto-detection
+[build.processing.js]
+  bundle = false
+  minify = false
