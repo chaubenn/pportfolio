@@ -9,7 +9,7 @@ export default function Page() {
   return (
     <section>
       <h1 className="mb-8 text-2xl font-semibold tracking-tighter">
-        Benjamin Chau 
+        Ben Chau 
       </h1>
       <p className="mb-4">
         {`I'm a second year computer science student at the University of Queensland, currently interning at `}

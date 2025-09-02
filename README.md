@@ -1,4 +1,4 @@
-# Benjamin Chau - Portfolio
+# Ben Chau - Portfolio
 
 This is my personal portfolio website built with Next.js, featuring:
 
@@ -45,4 +45,4 @@ To set up a custom domain:
 
 ---
 
-© 2025 Benjamin Chau - MIT Licensed
+© 2025 Ben Chau - MIT Licensed

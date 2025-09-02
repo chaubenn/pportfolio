@@ -9,13 +9,13 @@ import { baseUrl } from './sitemap'
 
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
-  title: 'Benjamin Chau',
+  title: 'Ben Chau',
   description: 'This is my portfolio.',
   openGraph: {
-    title: 'Benjamin Chau',
+    title: 'Ben Chau',
     description: 'This is my portfolio.',
     url: baseUrl,
-    siteName: 'Benjamin Chau',
+    siteName: 'Ben Chau',
     locale: 'en_US',
     type: 'website',
   },
