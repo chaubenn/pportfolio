@@ -26,7 +26,7 @@ const PdfViewer = ({ url }: { url: string }) => {
     setIsClient(true);
     // Set the worker source for react-pdf using local file
     import('react-pdf').then(({ pdfjs }) => {
-      pdfjs.GlobalWorkerOptions.workerSrc = '/pdfjs/pdf.worker.min.js';
+      pdfjs.GlobalWorkerOptions.workerSrc = '/pportfolio/pdfjs/pdf.worker.min.js';
     });
   }, []);
 
