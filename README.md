@@ -30,7 +30,18 @@ pnpm build
 
 ## Deploy
 
-This portfolio is designed to be deployed on platforms like Netlify, Vercel, or similar hosting services that support Next.js applications.
+This portfolio is deployed on GitHub Pages using GitHub Actions for automatic deployment.
+
+### GitHub Pages Setup
+- The site is automatically built and deployed when changes are pushed to the main branch
+- Uses GitHub Actions workflow (`.github/workflows/deploy.yml`) for CI/CD
+- Static export configuration optimized for GitHub Pages hosting
+
+### Custom Domain
+To set up a custom domain:
+1. Add your domain in GitHub repository Settings → Pages
+2. Create a CNAME file: `echo "yourdomain.com" > public/CNAME`
+3. Configure DNS records with your domain provider
 
 ---
 
